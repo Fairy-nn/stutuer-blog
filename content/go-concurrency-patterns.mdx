@@ -1,0 +1,227 @@
+---
+title: Go语言并发模式实战指南
+description: 详解Go语言中的各种并发模式与最佳实践，包括goroutine、channel、互斥锁等核心概念的实际应用
+date: 2023-11-05
+tags: [golang, 并发编程, 后端开发]
+categories: [golang, 并发编程]
+---
+
+# Go语言并发模式实战指南
+
+Go语言(Golang)因其出色的并发编程支持而广受欢迎。本文将深入探讨Go中的各种并发模式与最佳实践，帮助开发者编写高效、可靠的并发程序。
+
+## Goroutine基础
+
+Goroutine是Go语言中最基本的并发单元，比线程更轻量。
+
+```go
+func main() {
+    // 启动一个goroutine执行hello函数
+    go hello("你好，世界")
+    
+    // 防止主goroutine退出
+    time.Sleep(time.Second)
+}
+
+func hello(msg string) {
+    fmt.Println(msg)
+}
+```
+
+**注意事项**：
+- Goroutine是非阻塞的，会立即返回
+- 主函数退出时，所有goroutine都会被强制终止
+- 实际应用中应使用同步机制而非sleep等待
+
+## Channel通信模式
+
+Channel是goroutine之间通信的管道，实现了CSP(通信顺序进程)模型。
+
+### 基本用法
+
+```go
+func main() {
+    ch := make(chan string)
+    
+    go func() {
+        ch <- "消息已发送"
+    }()
+    
+    msg := <-ch
+    fmt.Println(msg)
+}
+```
+
+### 带缓冲的Channel
+
+```go
+bufCh := make(chan int, 3) // 缓冲大小为3
+```
+
+### 单向Channel
+
+```go
+func producer(out chan<- int) {
+    // 只能发送到out
+    for i := 0; i < 10; i++ {
+        out <- i
+    }
+    close(out)
+}
+
+func consumer(in <-chan int) {
+    // 只能从in接收
+    for num := range in {
+        fmt.Println(num)
+    }
+}
+```
+
+## 常见并发模式
+
+### 工作池模式
+
+```go
+func worker(id int, jobs <-chan int, results chan<- int) {
+    for j := range jobs {
+        fmt.Printf("工作者 %d 开始处理任务 %d\n", id, j)
+        time.Sleep(time.Second) // 模拟耗时操作
+        fmt.Printf("工作者 %d 完成任务 %d\n", id, j)
+        results <- j * 2
+    }
+}
+
+func main() {
+    jobs := make(chan int, 100)
+    results := make(chan int, 100)
+    
+    // 启动3个工作者
+    for w := 1; w <= 3; w++ {
+        go worker(w, jobs, results)
+    }
+    
+    // 发送5个任务
+    for j := 1; j <= 5; j++ {
+        jobs <- j
+    }
+    close(jobs)
+    
+    // 收集结果
+    for a := 1; a <= 5; a++ {
+        <-results
+    }
+}
+```
+
+### 超时控制模式
+
+```go
+select {
+case res := <-c:
+    fmt.Println("接收到结果:", res)
+case <-time.After(1 * time.Second):
+    fmt.Println("操作超时")
+}
+```
+
+### 扇入扇出模式
+
+```go
+// 扇入：多个输入，一个输出
+func fanIn(input1, input2 <-chan string) <-chan string {
+    c := make(chan string)
+    go func() {
+        for {
+            select {
+            case s := <-input1:
+                c <- s
+            case s := <-input2:
+                c <- s
+            }
+        }
+    }()
+    return c
+}
+
+// 扇出：一个输入，多个处理
+func fanOut(input <-chan int, workers int) []<-chan int {
+    outputs := make([]<-chan int, workers)
+    for i := 0; i < workers; i++ {
+        outputs[i] = worker(input)
+    }
+    return outputs
+}
+```
+
+## 同步原语
+
+Go提供了丰富的同步原语，帮助协调goroutine：
+
+### WaitGroup
+
+```go
+func main() {
+    var wg sync.WaitGroup
+    
+    for i := 1; i <= 5; i++ {
+        wg.Add(1) // 增加等待计数
+        go func(id int) {
+            defer wg.Done() // 完成后减少计数
+            fmt.Printf("工作者 %d 完成任务\n", id)
+        }(i)
+    }
+    
+    wg.Wait() // 等待所有goroutine完成
+    fmt.Println("所有任务已完成")
+}
+```
+
+### 互斥锁
+
+```go
+var (
+    counter int
+    mutex   sync.Mutex
+)
+
+func increment() {
+    mutex.Lock()
+    defer mutex.Unlock()
+    counter++
+}
+```
+
+### Context控制
+
+```go
+func worker(ctx context.Context) {
+    for {
+        select {
+        case <-ctx.Done():
+            fmt.Println("工作被取消")
+            return
+        default:
+            fmt.Println("工作进行中...")
+            time.Sleep(time.Second)
+        }
+    }
+}
+
+func main() {
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+    
+    go worker(ctx)
+    time.Sleep(10 * time.Second)
+}
+```
+
+## 最佳实践
+
+1. **适度使用goroutine**：每个goroutine消耗约2KB内存，但总量不受控制可能导致内存耗尽
+2. **记得关闭channel**：发送方负责关闭channel，接收方检测关闭状态
+3. **使用select防止阻塞**：处理多个channel操作，包括超时控制
+4. **考虑错误处理**：并发错误难以追踪，设计良好的错误传递机制
+5. **避免goroutine泄漏**：确保每个启动的goroutine最终都能结束
+
+掌握这些并发模式和最佳实践，能够帮助我们充分发挥Go语言并发编程的优势，构建高性能、可靠的系统。 
