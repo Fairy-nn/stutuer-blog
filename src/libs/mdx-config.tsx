@@ -15,14 +15,14 @@ export const mdxComponents: MDXComponents = {
   a: (props) => (
     <a
       {...props}
-      className='no-underline text-blue-500 hover:text-blue-400 [overflow-wrap:anywhere]'
+      className='no-underline text-zinc-500 hover:text-zinc-100 [overflow-wrap:anywhere]'
     />
   ),
   strong: (props) => (
     <strong {...props} className='font-semibold text-gray-900 dark:text-gray-100' />
   ),
   code: (props) => <code {...props} className='text-gray-900 dark:text-gray-100 mx-2' />,
-  em: (props) => <em {...props} className='italic text-pink-300' />,
+  em: (props) => <em {...props} className='italic text-zinc-300' />,
   h1: (props) => (
     <Heading
       as='h1'

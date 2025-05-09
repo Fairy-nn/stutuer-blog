@@ -5,7 +5,7 @@ import { IconChevronDown, IconList } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-// 监听滚动，高亮当前可见的标题
+// Monitor scrolling to highlight the currently visible heading
 export function useActiveHeading(toc: TableOfContents) {
   const [activeHeading, setActiveHeading] = useState('');
 
@@ -57,9 +57,18 @@ const TocItem = ({
 }) => {
   const isActive = activeHeading === item.url.slice(1);
   
-  let paddingClass = 'pl-2';
-  if (item.depth > 1) {
-    paddingClass = `pl-${(item.depth * 3)}`;
+  // 根据深度计算缩进
+  let paddingClass = '';
+  if (item.depth === 1) {
+    paddingClass = 'pl-2';
+  } else if (item.depth === 2) {
+    paddingClass = 'pl-6';
+  } else if (item.depth === 3) {
+    paddingClass = 'pl-10';
+  } else if (item.depth === 4) {
+    paddingClass = 'pl-14';
+  } else if (item.depth >= 5) {
+    paddingClass = 'pl-18';
   }
   
   return (
@@ -86,12 +95,11 @@ export function Toc({
     <div className={`toc ${className || ''}`}>
       <button 
         type='button' 
-        className='flex items-center text-pink-600 dark:text-pink-400 w-full justify-between mb-2'
+        className='flex items-center text-zinc-900 dark:text-zinc-100 w-full justify-between mb-2'
         onClick={() => setOpen(!open)}
       >
         <div className="flex items-center">
-          <IconList size={18} className='mr-2' />
-          <span className='toc-title my-0'>目录</span>
+          <span className='toc-title my-0'>Table of Contents</span>
         </div>
         <IconChevronDown 
           size={18} 
@@ -113,7 +121,7 @@ export function Toc({
       
       {toc.length === 0 && (
         <p className="text-sm text-gray-500 dark:text-gray-400 italic">
-          此文章没有目录
+          This article has no table of contents
         </p>
       )}
     </div>

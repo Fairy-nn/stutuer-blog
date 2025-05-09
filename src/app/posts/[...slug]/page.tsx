@@ -4,10 +4,16 @@ import { PostContent, type PostPageData } from '@/app/posts/[...slug]/PostConten
 import { mdxComponents } from '@/libs/mdx-config';
 import { serializeDate } from '@/libs/serializeData';
 
-const PageWrapper = async (props: {
-  params: { slug: string[] };
-}) => {
-  const postFromSource = await getPage(props.params.slug);
+// 定义 Promise 类型的 params
+type ParamsType = Promise<{ slug: string[] }>;
+
+export default async function PageWrapper({
+  params
+}: {
+  params: ParamsType
+}) {
+  const resolvedParams = await params;
+  const postFromSource = await getPage(resolvedParams.slug);
 
   if (postFromSource === undefined) {
     notFound();
@@ -47,9 +53,7 @@ const PageWrapper = async (props: {
   const renderedMdxContent = <MdxSourceComponent components={mdxComponents} />;
 
   return <PostContent post={postForContent}>{renderedMdxContent}</PostContent>;
-};
-
-export default PageWrapper;
+}
 
 export const generateStaticParams = () => {
   return getProdPages()

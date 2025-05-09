@@ -34,7 +34,7 @@ export const PostContent = ({
   children: ReactNode;
 }) => {
   // 反序列化日期
-  const date = new Date(post.data.date).toLocaleDateString('zh-CN', {
+  const date = new Date(post.data.date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -44,7 +44,7 @@ export const PostContent = ({
   let lastUpdateDate: string | undefined = undefined;
   
   if (lastModified !== undefined) {
-    lastUpdateDate = new Date(lastModified).toLocaleDateString('zh-CN', {
+    lastUpdateDate = new Date(lastModified).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -69,20 +69,12 @@ export const PostContent = ({
 
   return (
     <div className="w-full mx-auto">
-      <div className="grid grid-cols-12 gap-8">
-        {/* 目录 - 在大屏幕上显示在左侧 */}
-        {toc && toc.length > 0 && (
-          <div className="hidden lg:block col-span-3 !mr-5 md:mr-0">
-            <Toc toc={toc} className="hidden lg:block" />
-          </div>
-        )}
-        
-        {/* 文章内容 */}
-        <div className={`col-span-9`}>
-          <article className="w-full bg-white dark:bg-gray-900 rounded-xl shadow-md p-6 md:p-8 border border-pink-100 dark:border-gray-800">
-            {/* 文章标题和元数据 */}
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-8">
+        <div className={`sm:col-span-8`}>
+          <article className="w-full p-6 md:p-8">
+            {/* Article title and metadata */}
             <header className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-gray-100 mb-4">
+              <h1 className="text-3xl md:text-4xl  font-bold text-gray-900 dark:text-gray-100 mb-4">
                 {post.data.title}
               </h1>
               
@@ -96,13 +88,13 @@ export const PostContent = ({
                   <div className="flex items-center">
                     <IconPencil size={16} className="mr-1" />
                     <time dateTime={lastModified}>
-                      最后更新: {lastUpdateDate}
+                      Last updated: {lastUpdateDate}
                     </time>
                   </div>
                 )}
               </div>
               
-              {/* 分类和标签 */}
+              {/* Categories and tags */}
               {items.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {items.map((item) => (
@@ -111,14 +103,14 @@ export const PostContent = ({
                 </div>
               )}
               
-              {/* 文章描述 */}
+              {/* Article description */}
               {post.data.description && (
-                <div className="mt-4 p-4 bg-pink-50 dark:bg-gray-800 rounded-lg border-l-4 border-pink-300 dark:border-pink-700 italic text-gray-700 dark:text-gray-300">
+                <div className="mt-4 p-4 bg-zinc-50 dark:bg-gray-800 rounded-lg border-l-4 border-zinc-300 dark:border-zinc-700 italic text-gray-700 dark:text-gray-300">
                   {post.data.description}
                 </div>
               )}
               
-              {/* 移动端的目录按钮 */}
+              {/* Mobile table of contents button */}
               {toc && toc.length > 0 && (
                 <div className="lg:hidden mt-6">
                   <Toc toc={toc} />
@@ -126,12 +118,18 @@ export const PostContent = ({
               )}
             </header>
             
-            {/* 文章内容 */}
+            {/* Article content */}
             <div className="blog-content w-full">
               {children}
             </div>
           </article>
         </div>
+
+        {toc && toc.length > 0 && (
+          <div className="hidden lg:block sm:col-span-4 !mr-5 sm:mr-0">
+            <Toc toc={toc} className="hidden lg:block" />
+          </div>
+        )}
       </div>
     </div>
   );

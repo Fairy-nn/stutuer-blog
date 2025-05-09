@@ -20,8 +20,8 @@ export const PostsList = ({ posts }: { posts: Posts }) => {
         return (
           <div key={post.url}>
             {change && (
-              <h2 className='text-2xl font-serif font-bold text-pink-600 dark:text-pink-400 mt-10 mb-4 pb-2 border-b border-pink-200 dark:border-pink-900'>
-                {year}年{month}月
+              <h2 className='text-2xl  font-bold text-zinc-900 dark:text-zinc-100 mt-10 mb-4 pb-2 border-b border-zinc-200 dark:border-zinc-900'>
+                {year} {new Date(0, month - 1).toLocaleString('en-US', { month: 'long' })}
               </h2>
             )}
             <article className="blog-card mb-4">
@@ -37,7 +37,7 @@ export const PostsList = ({ posts }: { posts: Posts }) => {
                     <div className="flex items-center">
                       <IconCalendar size={14} className="mr-1" />
                       <time dateTime={post.data.date.toISOString()}>
-                        {post.data.date.toLocaleDateString('zh-CN', {
+                        {post.data.date.toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -55,7 +55,7 @@ export const PostsList = ({ posts }: { posts: Posts }) => {
                 </div>
               </Link>
               
-              {/* 分类和标签 */}
+              {/* Categories and tags */}
               {((post.data.categories && post.data.categories.length > 0) || 
                 (post.data.tags && post.data.tags.length > 0)) && (
                 <div className="px-5 pb-5 pt-0 flex flex-wrap gap-2">
@@ -93,13 +93,13 @@ export const PostsList = ({ posts }: { posts: Posts }) => {
 export const DraftPostList = ({ posts }: { posts: Posts }) => {
   return (
     <div className='space-y-4'>
-      <h2 className='text-2xl font-serif font-bold text-pink-600 dark:text-pink-400 mt-8 mb-4 pb-2 border-b border-pink-200 dark:border-pink-900'>草稿</h2>
+      <h2 className='text-2xl  font-bold text-zinc-900 dark:text-zinc-100 mt-8 mb-4 pb-2 border-b border-zinc-200 dark:border-zinc-900'>Drafts</h2>
       {posts.map((post) => (
         <article key={post.url} className="blog-card mb-4 border-dashed">
           <Link href={post.url}>
             <div className="p-5">
               <h3 className="blog-card-title mb-2">
-                <span className="text-gray-500 dark:text-gray-400">[草稿]</span> {post.data.title}
+                <span className="text-gray-500 dark:text-gray-400">[Draft]</span> {post.data.title}
               </h3>
               
               {post.data.description && (

@@ -8,7 +8,7 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
-  // 在客户端渲染后再挂载组件，避免水合不匹配
+  // Only mount component after client-side rendering to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -20,13 +20,19 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="p-2 rounded-lg bg-pink-100 dark:bg-gray-800 text-pink-600 dark:text-pink-400 hover:bg-pink-200 dark:hover:bg-gray-700 transition-colors"
+      className="p-2 rounded-lg cursor-pointer bg-zinc-100 dark:bg-gray-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-gray-700"
       aria-label="Toggle theme"
     >
       {theme === 'dark' ? (
-        <IconSun size={20} />
+        <div className="flex items-center gap-2">
+          <IconSun size={20} />
+          <span>Light</span>
+        </div>
       ) : (
-        <IconMoon size={20} />
+        <div className="flex items-center gap-2">
+          <IconMoon size={20} />
+          <span>Dark</span>
+        </div>
       )}
     </button>
   );

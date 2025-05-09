@@ -62,17 +62,17 @@
   }
 
   /* 全局过渡动画 */
-  * {
+  /* * {
     @apply transition-colors duration-200;
-  }
+  } */
 
   body {
-    @apply bg-pink-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100;
-    /* font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; */
+    @apply bg-white text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100;
+    font-family: var(--font-misans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    /* font-family: 'Playfair Display', serif; */
     @apply font-bold tracking-tight text-gray-900 dark:text-gray-100;
   }
 
@@ -80,9 +80,6 @@
     @apply leading-7;
   }
   
-  .font-serif {
-    font-family: 'Playfair Display', serif;
-  }
   
   /* 页面过渡动画 */
   /* main {
@@ -113,19 +110,19 @@
   }
   
   .blog-content h1 {
-    @apply text-3xl md:text-4xl mb-6 !font-bold text-pink-700 dark:text-pink-400;
+    @apply text-3xl md:text-4xl mb-6 !font-bold text-zinc-700 dark:text-zinc-100;
   }
   
   .blog-content h2 {
-    @apply text-2xl md:text-3xl mt-10 mb-4 !font-semibold text-pink-600 dark:text-pink-400 border-b border-pink-200 dark:border-pink-900 pb-2;
+    @apply text-2xl md:text-3xl mt-10 mb-4 !font-semibold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-900 pb-2;
   }
   
   .blog-content h3 {
-    @apply text-xl md:text-2xl mt-8 mb-3 !font-semibold text-pink-600 dark:text-pink-400;
+    @apply text-xl md:text-2xl mt-8 mb-3 !font-semibold text-zinc-900 dark:text-zinc-100;
   }
 
   .blog-content h4 {
-    @apply text-lg md:text-xl mt-6 mb-2 !font-semibold text-pink-600 dark:text-pink-400;
+    @apply text-lg md:text-xl mt-6 mb-2 !font-semibold text-zinc-900 dark:text-zinc-100;
   }
   
   .blog-content p {
@@ -133,7 +130,7 @@
   }
   
   .blog-content a {
-    @apply text-pink-600 dark:text-pink-400 hover:underline decoration-1 underline-offset-2 transition-all duration-200;
+    @apply text-zinc-900 dark:text-zinc-100 hover:underline decoration-1 underline-offset-2 transition-all duration-200;
   }
   
   .blog-content pre {
@@ -149,7 +146,7 @@
   }
   
   .blog-content blockquote {
-    @apply border-l-4 border-pink-300 dark:border-pink-700 pl-4 italic text-gray-700 dark:text-gray-400;
+    @apply border-l-4 border-zinc-300 dark:border-zinc-700 pl-4 italic text-gray-700 dark:text-gray-400;
   }
   
   .blog-content ul, .blog-content ol {
@@ -165,16 +162,16 @@
   }
   
   .blog-content hr {
-    @apply my-8 border-pink-200 dark:border-pink-900;
+    @apply my-8 border-zinc-200 dark:border-zinc-900;
   }
   
   /* 博客卡片样式 */
   .blog-card {
-    @apply bg-white dark:bg-gray-900 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:translate-y-[-2px] overflow-hidden border border-pink-100 dark:border-gray-800;
+    @apply rounded-lg hover:bg-zinc-100 dark:hover:bg-gray-800 transition-all duration-300  overflow-hidden border border-zinc-300 dark:border-zinc-800;
   }
   
   .blog-card-title {
-    @apply text-xl font-serif font-bold text-gray-800 dark:text-gray-100 line-clamp-2;
+    @apply text-xl font-bold text-gray-800 dark:text-gray-100 line-clamp-2;
   }
   
   .blog-card-description {
@@ -183,31 +180,31 @@
   
   /* 标签样式 */
   .tag {
-    @apply inline-flex items-center rounded-full bg-pink-100 dark:bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-pink-700 dark:text-pink-400 hover:bg-pink-200 dark:hover:bg-gray-700 transition-colors hover:scale-105 transform duration-200;
+    @apply inline-flex items-center rounded-full bg-zinc-200 dark:bg-gray-800 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-gray-700 transition-colors hover:scale-105 transform duration-200;
   }
   
   /* 目录样式 */
   .toc {
-    @apply sticky top-6 max-h-[calc(100vh-4rem)] overflow-auto p-4 border border-pink-100 dark:border-gray-800 rounded-lg bg-white dark:bg-gray-900 transition-all duration-300;
+    @apply sticky top-6 max-h-[calc(100vh-4rem)] overflow-auto p-4 transition-all duration-300;
   }
   
   .toc-title {
-    @apply text-lg font-serif font-semibold text-pink-600 dark:text-pink-400 mb-3;
+    @apply text-lg  font-semibold text-zinc-900 dark:text-zinc-100 mb-3;
   }
   
   .toc-link {
-    @apply block py-1 text-sm text-gray-700 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors hover:pl-1 duration-200;
+    @apply block py-1 text-sm text-gray-700 dark:text-gray-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors hover:pl-1 duration-200;
   }
   
   .toc-link.active {
-    @apply text-pink-600 dark:text-pink-400 font-medium;
+    @apply text-zinc-900 dark:text-zinc-100 font-medium;
   }
   
   /* 导航链接悬停效果 */
-  nav a:hover {
+  /* nav a:hover {
     @apply transform translate-x-1 transition-transform duration-200;
   }
-  
+   */
   /* 自定义滚动条 */
   ::-webkit-scrollbar {
     width: 8px;
@@ -215,19 +212,19 @@
   }
   
   ::-webkit-scrollbar-track {
-    @apply bg-pink-50 dark:bg-gray-900;
+    @apply bg-zinc-50 dark:bg-gray-900;
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-pink-200 dark:bg-gray-700 rounded-full hover:bg-pink-300 dark:hover:bg-gray-600 transition-colors;
+    @apply bg-zinc-200 dark:bg-gray-700 rounded-full hover:bg-zinc-300 dark:hover:bg-gray-600 transition-colors;
   }
 }
 
 /* 亮暗模式切换动画 */
-html.dark {
+/* html.dark {
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 html.light {
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-}
+} */

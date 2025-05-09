@@ -15,24 +15,21 @@ export function HomePage({ about, posts }: HomePageProps) {
   // 不再尝试直接使用 about.data.body
   
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       {/* Hero 部分 */}
       <section className="mb-16">
-        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-md p-8 border border-pink-100 dark:border-gray-800">
+        <div className="">
           <div className="md:flex items-start gap-8">
-            <div className="md:w-3/4">
-              <h1 className="text-4xl md:text-5xl font-serif font-bold text-pink-600 dark:text-pink-400 mb-6">
-                欢迎来到 stutuer
+            <div className="md:w-3/4 flex flex-col justify-center items-start">
+              <h1 className="text-4xl md:text-5xl  font-bold text-zinc-900 dark:text-zinc-100 mb-6">
+                Hello, I'm stutuer
               </h1>
               
-              <div className="blog-content">
-                {/* 不再直接渲染 MDX 组件 */}
-                <div className="prose dark:prose-invert">
-                  {about.data.description && (
-                    <p>{about.data.description}</p>
-                  )}
-                </div>
+              <div className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-2">
+                I'm a graduate student at Beijing Jiaotong University, majoring in Computer Science and Technology.
               </div>
+
+              <img className="my-4" src="https://skillicons.dev/icons?i=go,redis,mysql,docker,react,mongodb,python,unity,kafka,kubernetes,docker,vercel,vscode" alt="Avatar" />
             </div>
             
             <div className="mt-8 md:mt-0 md:w-1/4 flex-shrink-0">
@@ -53,8 +50,8 @@ export function HomePage({ about, posts }: HomePageProps) {
       
       {/* 最新文章部分 */}
       <section>
-        <h2 className="text-3xl font-serif font-bold text-pink-600 dark:text-pink-400 mb-6">
-          最新文章
+        <h2 className="text-3xl font-serif font-bold text-zinc-900 dark:text-zinc-100 mb-6">
+          Latest Posts
         </h2>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -72,7 +69,7 @@ export function HomePage({ about, posts }: HomePageProps) {
                     <div className="flex items-center">
                       <IconCalendar size={14} className="mr-1" />
                       <time dateTime={post.data.date}>
-                        {new Date(post.data.date).toLocaleDateString('zh-CN', {
+                        {new Date(post.data.date).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
                           day: 'numeric',
@@ -123,9 +120,9 @@ export function HomePage({ about, posts }: HomePageProps) {
         <div className="mt-8 text-center">
           <Link 
             href="/posts"
-            className="inline-block bg-pink-100 hover:bg-pink-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-pink-700 dark:text-pink-400 font-medium px-6 py-3 rounded-lg transition-colors"
+            className="inline-block bg-zinc-100 hover:bg-zinc-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-zinc-700 dark:text-zinc-100 font-medium px-6 py-3 rounded-lg transition-colors"
           >
-            查看全部文章
+            View All Posts
           </Link>
         </div>
       </section>

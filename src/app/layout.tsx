@@ -9,70 +9,81 @@ import Link from 'next/link';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { IconBook, IconTags, IconFolders, IconBrandGithub, IconBrandTwitter, IconBrandInstagram, IconArrowUp } from '@tabler/icons-react';
 import ScrollToTop from '@/components/ScrollToTop';
+import localFont from 'next/font/local';
+import { LuRabbit } from "react-icons/lu";
+
+// 引入 Inter 
+import { Inter } from 'next/font/google';
+const inter = Inter({ subsets: ['latin'] });
+
+// 引入 Knewave
+import { Knewave } from 'next/font/google';
+const knewave = Knewave({ weight: '400', subsets: ['latin'] });
+
+// Crimson Text
+import { Crimson_Text } from 'next/font/google';
+const crimsonText = Crimson_Text({ weight: '600', subsets: ['latin'] });
+
+// const MiSans = localFont({
+//   src: [
+//     {
+//       path: '../../public/MiSansVF.ttf',
+//       weight: '100 900',  // 可变字体的范围
+//       style: 'normal',
+//     },
+//   ],
+//   variable: '--font-misans',
+// });
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang='zh-CN' suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning>
       {process.env.NODE_ENV === 'production' && (
         <>
           <Analytics />
           <SpeedInsights />
         </>
       )}
-      <body className='flex min-h-dvh flex-col bg-pink-50 dark:bg-gray-900'>
+      <body className={`${inter.className} flex min-h-dvh flex-col bg-zinc-50 dark:bg-gray-900`}>
         <ThemeProvider attribute="class" defaultTheme="light">
-          {/* Gradient decoration */}
-          <div className="fixed top-0 right-0 w-96 h-96 bg-gradient-to-bl from-pink-200 to-purple-100 rounded-bl-full opacity-50 dark:from-pink-800 dark:to-purple-900 dark:opacity-20 -z-10" />
-          
           <div className="flex flex-col md:flex-row min-h-dvh">
             {/* Sidebar */}
-            <aside className="md:w-64 lg:w-72 md:min-h-dvh md:fixed md:left-0 md:top-0 border-r border-pink-200 dark:border-gray-800 bg-white dark:bg-gray-950 p-4 z-10 transition-all duration-300">
-              <div className="flex flex-col h-full">
-                {/* Logo */}
-                <div className="mb-8 text-center">
-                  <Link href="/" className="inline-block">
-                    <h1 className="text-3xl font-serif font-bold text-pink-600 dark:text-pink-400 hover:scale-105 transform transition-transform duration-300">stutuer</h1>
-                  </Link>
+            <aside className="md:w-64 lg:w-72 md:min-h-dvh md:fixed flex flex-col justify-between md:left-0 md:top-0 border-r border-zinc-200 dark:border-gray-800 p-4 z-10 transition-all duration-300">
+                <div className="flex flex-col h-full mx-4 my-2">
+                  <div className="mb-8">
+                    <Link href="/" className="flex items-center justify-start">
+                      <LuRabbit className="text-4xl mr-2 font-bold text-zinc-900 dark:text-zinc-100 hover:scale-105 transform transition-transform duration-300" />
+                      <h1 className={`${crimsonText.className} text-4xl font-bold text-zinc-900 dark:text-zinc-100 hover:scale-105 transform transition-transform duration-300`}>stutuer</h1>
+                    </Link>
+                  </div>
+                  
+                  {/* Navigation */}
+                  <nav className="mb-8 space-y-4">
+                    <Link href="/posts" className="flex font-serif items-center py-2 text-lg text-gray-700 dark:text-gray-300">
+                      <IconBook className="mr-2" size={20} />
+                      <span>Blog</span>
+                    </Link>
+                    <Link href="/categories" className="flex font-serif items-center py-2 text-lg text-gray-700 dark:text-gray-300">
+                      <IconFolders className="mr-2" size={20} />
+                      <span>Categories</span>
+                    </Link>
+                    <Link href="/tags" className="flex items-center font-serif py-2 text-lg text-gray-700 dark:text-gray-300">
+                      <IconTags className="mr-2" size={20} />
+                      <span>Tags</span>
+                    </Link>
+                  </nav>
                 </div>
                 
-                {/* Navigation */}
-                <nav className="mb-8 space-y-4">
-                  <Link href="/posts" className="flex items-center px-4 py-2 text-lg text-gray-700 dark:text-gray-300 hover:bg-pink-100 dark:hover:bg-gray-800 rounded-lg transition-colors hover:text-pink-600 dark:hover:text-pink-400">
-                    <IconBook className="mr-2" size={20} />
-                    <span>Blog</span>
-                  </Link>
-                  <Link href="/categories" className="flex items-center px-4 py-2 text-lg text-gray-700 dark:text-gray-300 hover:bg-pink-100 dark:hover:bg-gray-800 rounded-lg transition-colors hover:text-pink-600 dark:hover:text-pink-400">
-                    <IconFolders className="mr-2" size={20} />
-                    <span>Categories</span>
-                  </Link>
-                  <Link href="/tags" className="flex items-center px-4 py-2 text-lg text-gray-700 dark:text-gray-300 hover:bg-pink-100 dark:hover:bg-gray-800 rounded-lg transition-colors hover:text-pink-600 dark:hover:text-pink-400">
-                    <IconTags className="mr-2" size={20} />
-                    <span>Tags</span>
-                  </Link>
-                </nav>
-                
-                {/* Theme toggle */}
-                <div className="mb-6 flex justify-center">
-                  <ThemeToggle />
-                </div>
-                
-                {/* Footer */}
-                <div className="mt-auto text-sm text-gray-500 dark:text-gray-400 space-y-2">
-                  <div className="flex justify-center gap-4 mb-2">
-                    <a href="https://github.com/stutuer" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-pink-500 dark:hover:text-pink-400 transition-colors hover:scale-110 transform">
+
+                <div className="mt-auto text-sm text-gray-500 dark:text-gray-400">          
+                  <p className="text-center text-xs">Powered by <a href="https://fumadocs.dev/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">Fumadocs</a> and <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">Vercel</a></p>
+                  <div className="flex justify-between items-center gap-4 my-4 w-full">
+                    <ThemeToggle />
+                    <a href="https://github.com/Fairy-nn" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-zinc-500 dark:hover:text-zinc-100 transition-colors">
                       <IconBrandGithub size={22} />
                     </a>
-                    <a href="https://twitter.com/stutuer" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-pink-500 dark:hover:text-pink-400 transition-colors hover:scale-110 transform">
-                      <IconBrandTwitter size={22} />
-                    </a>
-                    <a href="https://instagram.com/stutuer" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 hover:text-pink-500 dark:hover:text-pink-400 transition-colors hover:scale-110 transform">
-                      <IconBrandInstagram size={22} />
-                    </a>
                   </div>
-                  <p className="text-center">© {new Date().getFullYear()} stutuer</p>
-                  <p className="text-center text-xs">Powered by Fumadocs and Vercel</p>
                 </div>
-              </div>
             </aside>
             
             {/* Main Content */}
@@ -95,10 +106,10 @@ export const metadata: Metadata = {
   ),
   title: {
     template: '%s | stutuer',
-    default: 'stutuer - 个人博客'
+    default: 'stutuer - Personal Blog'
   },
-  description: 'stutuer的个人博客，分享编程、设计和生活的点滴思考',
-  keywords: ['博客', '技术博客', '个人网站', 'Next.js', 'React', '前端开发'],
+  description: 'stutuer\'s personal blog, sharing thoughts on programming, design, and life',
+  keywords: ['blog', 'tech blog', 'personal website', 'Next.js', 'React', 'frontend development'],
   authors: [{ name: 'stutuer' }],
   creator: 'stutuer',
   publisher: 'stutuer',
@@ -113,17 +124,17 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'zh_CN',
+    locale: 'en_US',
     siteName: 'stutuer',
-    title: 'stutuer - 个人博客',
-    description: 'stutuer的个人博客，分享编程、设计和生活的点滴思考',
+    title: 'stutuer - Personal Blog',
+    description: 'stutuer\'s personal blog, sharing thoughts on programming, design, and life',
     images: '/api/og',
     url: '/',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'stutuer - 个人博客',
-    description: 'stutuer的个人博客，分享编程、设计和生活的点滴思考',
+    title: 'stutuer - Personal Blog',
+    description: 'stutuer\'s personal blog, sharing thoughts on programming, design, and life',
     images: '/api/og',
     creator: '@stutuer',
   },
@@ -140,7 +151,7 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#fff1f2' }, // pink-50
+    { media: '(prefers-color-scheme: light)', color: '#fff1f2' }, // zinc-50
     { media: '(prefers-color-scheme: dark)', color: '#171717' }, // gray-900
   ],
   viewport: {

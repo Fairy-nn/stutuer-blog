@@ -17,12 +17,12 @@ const Page = () => {
   return (
     <div className="max-w-5xl mx-auto">
       <header className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-pink-600 dark:text-pink-400 mb-3">
-          全部文章
+        <h1 className="text-3xl font-serif md:text-4xl  font-bold text-zinc-900 dark:text-zinc-100 mb-3">
+          All Posts
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          共有 {posts.length} 篇文章
-          {isDev && draftPosts.length > 0 && `, 另有 ${draftPosts.length} 篇草稿`}
+          {posts.length} posts in total
+          {isDev && draftPosts.length > 0 && `, plus ${draftPosts.length} drafts`}
         </p>
       </header>
 
@@ -37,7 +37,7 @@ const Page = () => {
       <section>
         {posts.length === 0 ? (
           <div className="text-center py-10 text-gray-500 dark:text-gray-400">
-            暂无文章
+            No posts yet
           </div>
         ) : (
           <PostsList posts={posts} />
@@ -50,8 +50,8 @@ const Page = () => {
 export default Page;
 
 export const generateMetadata = () => {
-  const title = '全部文章 - stutuer';
-  const description = 'stutuer的博客文章列表';
+  const title = 'All Posts - stutuer';
+  const description = 'stutuer\'s blog post list';
 
   return {
     title,
