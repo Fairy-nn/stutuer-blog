@@ -137,16 +137,16 @@
     @apply rounded-lg p-4 overflow-x-auto;
   }
   
-  .blog-content code {
-    @apply bg-gray-100 dark:bg-gray-800 rounded px-1 py-0.5 text-sm;
-  }
+  /* .blog-content code {
+    @apply rounded px-1 py-0.5 text-sm;
+  } */
   
   .blog-content pre code {
-    @apply p-0 mx-2;
+    @apply p-0 mx-2 text-base;
   }
   
   .blog-content blockquote {
-    @apply border-l-4 border-zinc-300 dark:border-zinc-700 pl-4 italic text-gray-700 dark:text-gray-400;
+    @apply border-l-4 border-zinc-300 dark:border-zinc-700 pl-4 italic text-gray-700 dark:text-gray-400 rounded-none;
   }
   
   .blog-content ul, .blog-content ol {

@@ -1,6 +1,7 @@
 import type { Posts } from '@/libs/source';
 import Link from 'next/link';
-import { IconCalendar, IconTag, IconFolder } from '@tabler/icons-react';
+import { IconCalendar, IconTag, IconFolder, IconEye } from '@tabler/icons-react';
+import ViewCounter from './ViewCounter';
 
 export const PostsList = ({ posts }: { posts: Posts }) => {
   let year = 0;
@@ -45,12 +46,19 @@ export const PostsList = ({ posts }: { posts: Posts }) => {
                       </time>
                     </div>
                     
-                    {post.data.tags && post.data.tags.length > 0 && (
+                    <div className="flex items-center gap-3">
                       <div className="flex items-center">
-                        <IconTag size={14} className="mr-1" />
-                        <span>{post.data.tags[0]}</span>
+                        <IconEye size={14} className="mr-1" />
+                        <ViewCounter slug={post.slugs[0]} type="posts" trackView={false} />
                       </div>
-                    )}
+                      
+                      {post.data.tags && post.data.tags.length > 0 && (
+                        <div className="flex items-center">
+                          <IconTag size={14} className="mr-1" />
+                          <span>{post.data.tags[0]}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Link>

@@ -1,39 +1,29 @@
-'use client';
-
-import { mdxComponents } from '@/libs/mdx-config';
 import { IconCalendar, IconPencil, IconFolder, IconTag, IconEye } from '@tabler/icons-react';
-import { ItemList } from '../_components/ItemList';
-import { Toc } from '../_components/Toc';
-import { useEffect, type ReactNode } from 'react';
-import ViewCounter from '@/components/ViewCounter';
+import { ItemList } from '@/app/posts/_components/ItemList';
+import { Toc } from '@/app/posts/_components/Toc';
+import type { ReactNode } from 'react';
+import { PostPageData } from '@/app/posts/[...slug]/PostContent';
+import ViewCounterSSR from './ViewCounterSSR';
+import { Redis } from "@upstash/redis";
 
-// 更新类型定义
-export type PostMeta = {
-  title: string;
-  description?: string;
-  date: string; // Expected to be ISO string
-  lastModified?: string; // Expected to be ISO string
-  tags?: string[];
-  categories?: string[];
-  keywords?: string[];
-  draft?: boolean;
-  toc?: any[]; // Assuming toc is serializable, adjust if needed
-  body?: any; // MDX content component
-};
-
-export type PostPageData = {
-  url: string;
-  slugs: string[];
-  data: PostMeta;
-};
-
-export const PostContent = ({ 
-  post,
-  children
-}: { 
+interface PostContentSSRProps { 
   post: PostPageData;
   children: ReactNode;
-}) => {
+}
+
+export async function PostContentSSR({ post, children }: PostContentSSRProps) {
+  // 获取浏览量
+  const redis = Redis.fromEnv();
+  let views = 0;
+  if (post.slugs && post.slugs.length > 0) {
+    try {
+      const viewsData = await redis.get(`pageviews:posts:${post.slugs[0]}`) || 0;
+      views = Number(viewsData);
+    } catch (error) {
+      console.error(`获取文章 ${post.slugs[0]} 的浏览量失败:`, error);
+    }
+  }
+
   // 反序列化日期
   const date = new Date(post.data.date).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -87,7 +77,7 @@ export const PostContent = ({
                 
                 <div className="flex items-center">
                   <IconEye size={16} className="mr-1" />
-                  <ViewCounter slug={post.slugs[0]} type="posts" />
+                  <span>{views.toLocaleString()} Views</span>
                 </div>
                 
                 {/* {lastUpdateDate !== undefined && lastUpdateDate !== date && (
@@ -139,4 +129,4 @@ export const PostContent = ({
       </div>
     </div>
   );
-}; 
+} 

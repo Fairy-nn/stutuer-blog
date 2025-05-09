@@ -1,0 +1,58 @@
+name: Generate Sitemap
+
+on:
+  push:
+    branches:
+      - main  # 或者 master，根据你的主分支名称
+    paths:
+      - 'content/**'          # 内容变更时
+      - 'src/**'              # 源代码变更时
+      - 'next-sitemap.config.js'  # sitemap 配置变更时
+      - 'config.json'         # 网站配置变更时
+      - 'package.json'        # 依赖变更时
+      - 'public/**'           # 公共文件变更时
+  schedule:
+    - cron: '0 0 * * 0'  # 每周日 UTC 时间 00:00 运行
+  workflow_dispatch:
+
+permissions:
+  contents: write  # 需要写权限来推送变更
+
+jobs:
+  generate-sitemap:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # 获取完整历史记录以正确推送
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      
+      - name: Install dependencies
+        run: bun install
+      
+      - name: Build application
+        run: bun run build
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL || 'https://stutuer.tech' }}
+      
+      # 在 postbuild 脚本中会自动运行 next-sitemap
+      
+      - name: Commit and push sitemap
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          # 检查是否有变更
+          if [[ -n $(git status -s public/sitemap*.xml public/robots.txt) ]]; then
+            git add public/sitemap*.xml public/robots.txt
+            git commit -m "chore: update sitemap and robots.txt"
+            git push
+          else
+            echo "no changes in sitemap or robots.txt"
+          fi 

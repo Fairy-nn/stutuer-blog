@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import { PostContent, type PostPageData } from '@/app/posts/[...slug]/PostContent';
 import { mdxComponents } from '@/libs/mdx-config';
 import { serializeDate } from '@/libs/serializeData';
+import ViewCounterSSR from '@/components/ViewCounterSSR';
+import { PostContentSSR } from '@/components/PostContentSSR';
+import HomeVisitTracker from '@/components/HomeVisitTracker';
 
 // 定义 Promise 类型的 params
 type ParamsType = Promise<{ slug: string[] }>;
@@ -52,7 +55,17 @@ export default async function PageWrapper({
 
   const renderedMdxContent = <MdxSourceComponent components={mdxComponents} />;
 
-  return <PostContent post={postForContent}>{renderedMdxContent}</PostContent>;
+  // 使用服务端组件替换客户端组件
+  return (
+    <>
+      {/* 访问追踪器组件 */}
+      <HomeVisitTracker />
+      
+      {/* 使用服务端组件显示文章 */}
+      <PostContentSSR post={postForContent}>{renderedMdxContent}</PostContentSSR>
+      <ViewCounterSSR slug={postForContent.slugs[0]} type="posts" />
+    </>
+  );
 }
 
 export const generateStaticParams = () => {

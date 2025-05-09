@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { IconCalendar, IconTag } from '@tabler/icons-react';
 import { HomePage } from './HomePage';
 import type { PostPageData } from './posts/[...slug]/PostContent';
+import { HomePageSSR, fetchPostsWithViews } from './HomePageSSR';
+import HomeVisitTracker from '@/components/HomeVisitTracker';
 
 // Type predicate to ensure posts are not null
 function isSerializedPost(post: PostPageData | null): post is PostPageData {
@@ -40,7 +42,7 @@ function serializePost(post: any): PostPageData | null {
   }
 }
 
-export default function IndexPage() {
+export default async function IndexPage() {
   const about = getPage([]);
 
   if (about === undefined) {
@@ -61,5 +63,13 @@ export default function IndexPage() {
     notFound(); // Or handle the case where 'about' page data is missing
   }
 
-  return <HomePage about={serializedAbout} posts={posts} />;
+  // 获取带有浏览量的文章
+  const postsWithViews = await fetchPostsWithViews(posts);
+
+  return (
+    <>
+      <HomeVisitTracker />
+      <HomePageSSR about={serializedAbout} posts={postsWithViews} />
+    </>
+  );
 }

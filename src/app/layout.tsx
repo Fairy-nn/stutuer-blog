@@ -7,10 +7,11 @@ import './global.css';
 import 'katex/dist/katex.css';
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { IconBook, IconTags, IconFolders, IconBrandGithub, IconBrandTwitter, IconBrandInstagram, IconArrowUp } from '@tabler/icons-react';
+import { IconBook, IconTags, IconFolders, IconBrandGithub, IconBrandTwitter, IconBrandInstagram, IconArrowUp, IconEye } from '@tabler/icons-react';
 import ScrollToTop from '@/components/ScrollToTop';
 import localFont from 'next/font/local';
 import { LuRabbit } from "react-icons/lu";
+import SiteCounter from '@/components/SiteCounter';
 
 // 引入 Inter 
 import { Inter } from 'next/font/google';
@@ -75,7 +76,11 @@ export default function Layout({ children }: { children: ReactNode }) {
                 </div>
                 
 
-                <div className="mt-auto text-sm text-gray-500 dark:text-gray-400">          
+                <div className="mt-auto text-sm text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center justify-center mb-4">
+                    <IconEye size={16} className="mr-1" />
+                    <SiteCounter />
+                  </div>          
                   <p className="text-center text-xs">Powered by <a href="https://fumadocs.dev/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">Fumadocs</a> and <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">Vercel</a></p>
                   <div className="flex justify-between items-center gap-4 my-4 w-full">
                     <ThemeToggle />

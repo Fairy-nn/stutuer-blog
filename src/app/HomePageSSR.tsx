@@ -1,26 +1,42 @@
-'use client';
-
-import { mdxComponents } from '@/libs/mdx-config';
-import { PostPageData } from './posts/[...slug]/PostContent';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IconCalendar, IconTag, IconEye } from '@tabler/icons-react';
-import HomeVisitTracker from '@/components/HomeVisitTracker';
-import ViewCounter from '@/components/ViewCounter';
+import { PostPageData } from './posts/[...slug]/PostContent';
+import { Redis } from "@upstash/redis";
 
-interface HomePageProps {
-  about: PostPageData;
-  posts: PostPageData[];
+interface PostWithViews extends PostPageData {
+  views: number;
 }
 
-export function HomePage({ about, posts }: HomePageProps) {
-  // 不再尝试直接使用 about.data.body
+interface HomePageSSRProps {
+  about: PostPageData;
+  posts: PostWithViews[];
+}
+
+export async function fetchPostsWithViews(posts: PostPageData[]): Promise<PostWithViews[]> {
+  const redis = Redis.fromEnv();
   
+  const postsWithViews = await Promise.all(
+    posts.map(async (post) => {
+      let views = 0;
+      if (post.slugs && post.slugs.length > 0) {
+        try {
+          const viewsData = await redis.get(`pageviews:posts:${post.slugs[0]}`) || 0;
+          views = Number(viewsData);
+        } catch (error) {
+          console.error(`获取文章 ${post.slugs[0]} 的浏览量失败:`, error);
+        }
+      }
+      return { ...post, views };
+    })
+  );
+  
+  return postsWithViews;
+}
+
+export function HomePageSSR({ about, posts }: HomePageSSRProps) {
   return (
     <div className="max-w-5xl mx-auto">
-      {/* 不可见的访问追踪器 */}
-      <HomeVisitTracker />
-      
       {/* Hero 部分 */}
       <section className="mb-16">
         <div className="">
@@ -85,7 +101,7 @@ export function HomePage({ about, posts }: HomePageProps) {
                     <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
                       <div className="flex items-center">
                         <IconEye size={14} className="mr-1" />
-                        <ViewCounter slug={post.slugs[0]} type="posts" trackView={false} className="text-xs" />
+                        <span className="text-xs">{post.views.toLocaleString()} Views</span>
                       </div>
                       
                       {post.data.tags && post.data.tags.length > 0 && (
