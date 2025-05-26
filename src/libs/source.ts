@@ -25,7 +25,7 @@ for (const post of posts) {
   }
 }
 
-export const tagsList = Array.from(tags).toSorted();
+export const tagsList = Array.from(tags).sort();
 
 export const tagsWithPosts: {
   name: string;
@@ -48,7 +48,7 @@ for (const post of posts) {
   }
 }
 
-export const categoriesList = Array.from(categories).toSorted();
+export const categoriesList = Array.from(categories).sort();
 
 export const categoriesWithPosts: {
   name: string;
